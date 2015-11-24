@@ -77,20 +77,10 @@ public class CountLines {
         }
         return newWords;
     }
-
+/*
     //TODO MARGIE - Re-Write recursively
 
-    /*
-
-    Base Case (i.e., when to stop)
-
-Work toward Base Case
-
-Recursive Call (i.e., call ourselves)
-
-
-
-    public static String[] BuildWordsRecursively(Integer[] phoneNumbers){
+    public static String[] BuildWordsR(Integer thisNumber, String[] arrayWords ){
         String[] newWords;
         String[] phoneLetters=phonePad.get(thisNumber);
 
@@ -111,9 +101,10 @@ Recursive Call (i.e., call ourselves)
             }
         }
         return newWords;
-        
     }
-     */
+
+*/
+
     public static boolean CheckArray(Integer [] numberArray){
         for (int i=0; i<numberArray.length; i++){
             if (!phonePad.containsKey(numberArray[i])) {

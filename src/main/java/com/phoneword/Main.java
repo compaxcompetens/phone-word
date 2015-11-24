@@ -36,12 +36,12 @@ public class Main {
             System.out.println("********test3*********\n\n");
             PhoneWord(new Integer[] {8,7,4,2,5,4,6});
 
-            System.out.println("*****************\n\n");
-            GetArraySizeTest();
-            System.out.println("*****************\n\n");
+//            System.out.println("*****************\n\n");
+//            GetArraySizeTest();
+//            System.out.println("*****************\n\n");
             CheckArrayTest();
             System.out.println("*****************\n\n");
-            BuildWordsTest();
+            BuildWordsRTest();
         }
 
     }
@@ -50,51 +50,43 @@ public class Main {
         if (!CheckArray(numberArray))
             return;
 
-        Integer wordArraySize=GetArraySize(numberArray);
-        String[] newWords = new String[wordArraySize];
-        for (int i=0; i<numberArray.length; i++){
-                newWords = BuildWords(numberArray[i], newWords);
-        }
+        String[] newWords=null;
+        String[] allWords = BuildWordsR(numberArray, (numberArray.length-1), newWords);
 
-        for (int i = 0, n = newWords.length; i < n; i++) {
-            if (newWords[i] != null)
-               System.out.println(newWords[i]);
+        for (int i = 0, n = allWords.length; i < n; i++) {
+            if (allWords[i] != null)
+               System.out.println(allWords[i]);
         }
     }
 
-    public static Integer GetArraySize(Integer[] numberArray){
-        Integer wordArraySize;
-        if (numberArray.length == 0) wordArraySize=0;
-        else wordArraySize=1;
-
-        for (int i=0; i<numberArray.length; i++){
-            wordArraySize=wordArraySize*phonePad.get(numberArray[i]).length;
-        }
-        return wordArraySize;
-    }
-
-    public static String[] BuildWords(Integer thisNumber, String[] arrayWords ){
-        String[] newWords;
+    public static String[] BuildWordsR(Integer[] myNumberArray,Integer thisPointer, String[] arrayWords ){
+        Integer thisNumber=myNumberArray[thisPointer];
         String[] phoneLetters=phonePad.get(thisNumber);
 
-        if (arrayWords[0] == null) {
-            newWords=phoneLetters;
+        if (thisPointer == 0) {
+            return(phoneLetters);
         }
         else {
-            Integer newArraySize = phonePad.get(thisNumber).length *arrayWords.length;
-            newWords = new String[newArraySize];
-            Integer count=0;
-            for (int i = 0, n = arrayWords.length; i < n; i++) {
+            return(matchString( BuildWordsR(myNumberArray,(thisPointer-1), arrayWords), phoneLetters));
+        }
+    }
 
-                for (int j = 0, m = phoneLetters.length; j < m; j++) {
-                    String newWord = String.format("%s%s", arrayWords[i], phoneLetters[j]);
-                    newWords[count]=newWord;
-                    count++;
-                }
+
+    public static String[] matchString( String[] arrayWords, String[] phoneLetters){
+        Integer thisArraySize = phoneLetters.length *arrayWords.length;
+        String[] newWords = new String[thisArraySize];
+        Integer count=0;
+        for (int i = 0, n = arrayWords.length; i < n; i++) {
+
+            for (int j = 0, m = phoneLetters.length; j < m; j++) {
+                String newWord = String.format("%s%s", arrayWords[i], phoneLetters[j]);
+                newWords[count]=newWord;
+                count++;
             }
         }
-        return newWords;
+        return(newWords);
     }
+
 
     public static boolean CheckArray(Integer [] numberArray){
         for (int i=0; i<numberArray.length; i++){
@@ -135,45 +127,26 @@ public class Main {
 
     }
 
-    public static void GetArraySizeTest(){
+
+    public static void BuildWordsRTest(){
         Boolean testPassed=true;
-
-        if (GetArraySize(new Integer[] {}) != 0)
-            testPassed=false;
-
-        if (GetArraySize(new Integer[] {2}) != 3)
-            testPassed=false;
-
-        if (GetArraySize( new Integer[] {2,3}) != 9)
-            testPassed=false;
-
-        if (GetArraySize( new Integer[] {9,7,2}) != 48)
-            testPassed=false;
-
-        if (testPassed)
-            System.out.println("GetArraySizeTest Test Passed!");
-        else
-            System.out.println("GetArraySizeTest Test Failed!");
-    }
-
-    public static void BuildWordsTest(){
-        Boolean testPassed=true;
-
         //Test Build words on single valid integer and null pre-sized array
-        String[] newWordsTest = BuildWords(3, new String[4]);
+
+
+        String[] newWordsTest = BuildWordsR(new Integer[]{3}, 0, null);
         if (!(Arrays.toString(newWordsTest).equals("[D, E, F]")))
             testPassed=false;
 
         //Test existing arrayWords with valid number with existing array
         String[] newWordsTest2 = new String[9];
-        newWordsTest2 = BuildWords(4,new String[] {"D","E","F"});
+        newWordsTest2 = BuildWordsR(new Integer[]{3,4}, 1,new String[] {"D","E","F"});
         if (!(Arrays.toString(newWordsTest2).equals("[DG, DH, DI, EG, EH, EI, FG, FH, FI]")))
             testPassed=false;
 
         if (testPassed)
-            System.out.println("BuildWordsTest Test Passed!");
+            System.out.println("BuildWordsR Test Passed!");
         else
-            System.out.println("BuildWordsTest Test Failed!");
+            System.out.println("BuildWordsR Test Failed!");
 
     }
 }
